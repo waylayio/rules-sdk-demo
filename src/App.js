@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import SDK from '@waylay/rules-sdk'
 import config from './sdk-config.json'
 
-const client = new SDK({ clientID: 'foo', clientSecret: 'bar', domain: 'housekeeper-staging.waylay.io', config: config })
+const client = new SDK({ clientID: '', clientSecret: '', domain: '', config: config })
 const builder = client.createTaskBuilder({ name: 'demo form rule' })
 const allPlugins = builder.getPlugins()
 
 const App = () => {
-  const [ selectedPlug, setSelectedPlug ] = useState()
+  const [ selectedPlug, setSelectedPlug ] = useState(allPlugins[0])
   const [ properties, setProperties ] = useState()
   const [ errorMessage, setErrorMessage ] = useState()
 
@@ -24,6 +24,27 @@ const App = () => {
       setProperties(null)
       setErrorMessage(e.toString())
     }
+  }
+
+  const submit = async () => {
+    try {
+      const task = await builder.createTask()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const updateProperties = (key, value) => {
+    const inputType = selectedPlug.properties[key].type
+    
+    let parsedValue
+
+    switch (inputType) {
+      case 'number': parsedValue = Number(value); break
+      default: parsedValue = value
+    }
+
+    setProperties({ ...properties, [key]: parsedValue })
   }
   
   return (
@@ -47,16 +68,18 @@ const App = () => {
           selectedPlug && (
             <div style={{ marginLeft: '50px' }}>
               <h3>Properties</h3>
-              {
-                selectedPlug.properties && (
-                  Object.entries(selectedPlug.properties).map(([key, value]) => (
-                    <div style={{ display: 'flex' }}>
-                      <div style={{ marginRight: '10px' }}>{key}</div>
-                      <input type='text' onChange={(e) => setProperties({ ...properties, [key]: e.target.value })} />
-                    </div>
-                  ))
-                )
-              }
+              <div style={{ display: 'flex' }}>
+                {
+                  selectedPlug.properties && (
+                    Object.entries(selectedPlug.properties).map(([key, value]) => (
+                      <div style={{ display: 'flex' }}>
+                        <div style={{ marginRight: '10px' }}>{key}</div>
+                        <input type='text' onChange={(e) => updateProperties(key, e.target.value)} />
+                      </div>
+                    ))
+                  )
+                }
+              </div>
             </div>
           )
         }
@@ -80,6 +103,9 @@ const App = () => {
             </div>
           })
         }
+      </div>
+      <div>
+        <button type="button" onClick={() => submit()} style={{ marginTop: '10px' }}>Upload Task</button>
       </div>
     </div>
   )

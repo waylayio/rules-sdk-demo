@@ -1996,9 +1996,9 @@
     query-string "^5"
     url "^0.11.0"
 
-"@waylay/rules-sdk@../rules-sdk/waylay-rules-sdk-v0.0.0.tgz":
+"@waylay/rules-sdk@./waylay-rules-sdk-v0.0.0.tgz":
   version "0.0.0"
-  resolved "../rules-sdk/waylay-rules-sdk-v0.0.0.tgz#cacf7acf78070ac25a8fcec731bae34309a5cc98"
+  resolved "./waylay-rules-sdk-v0.0.0.tgz#bfa9f71734d83f7a1433945ae0fad4e47d2da285"
   dependencies:
     "@waylay/client" "^2.31.0"
     ajv "^8.6.3"

@@ -74,11 +74,14 @@
     ]
   },
   {
-    "name": "truck standing still",
-    "description": "check if the resource speed is 0",
+    "name": "Truckspeed",
+    "description": "Check if the speed of a truck equals your defined speed",
     "properties": {
       "resource": {
         "type": "string"
+      },
+      "speed": {
+        "type": "number"
       }
     },
     "plugins": [
@@ -100,7 +103,7 @@
         "version": "1.1.0",
         "type": "sensor",
         "properties": {
-          "condition": "${<%previousNode%>.rawData.speed === 0"
+          "condition": "${<%previousNode%>.rawData.speed === <%properties.speed%>"
         },
         "dataTrigger": false,
         "tickTrigger": false,
