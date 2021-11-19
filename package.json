@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@waylay/rules-sdk": "./waylay-rules-sdk-v0.0.0.tgz",
+    "@waylay/rules-helper": "./waylay-rules-helper-v0.0.0.tgz",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3"

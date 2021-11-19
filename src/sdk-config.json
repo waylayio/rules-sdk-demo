@@ -1,7 +1,7 @@
 [
   {
-    "name": "exit geofence",
-    "description": "Checks if a resource entered a geofence",
+    "name": "Data and delay",
+    "description": "Wait a second when data comes in",
     "properties": {
       "resource": {
         "type": "string"
@@ -9,9 +9,9 @@
     },
     "plugins": [
       {
-        "name": "stream",
+        "name":"stream",
         "type": "sensor",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "properties": {
           "resource": "<%properties.resource%>"
         },
@@ -22,93 +22,59 @@
         ]
       },
       {
-        "name": "condition",
-        "version": "1.1.0",
+        "name": "delaySensor",
+        "version": "0.0.1",
         "type": "sensor",
         "properties": {
-          "condition": "${<%previousNode%>.rawData.stream.direction} === \"EXIT\""
+          "delay": 1000
         },
         "dataTrigger": false,
         "tickTrigger": false,
         "triggers": [
-          "True"
+          "Triggered"
         ]
       }
     ]
   },
   {
-    "name": "truck engine idle",
-    "description": "check if the resource engine is turned off",
+    "name": "threshold crossed",
+    "description": "check if the the treshold for the passed metric is crossed",
     "properties": {
-      "resource": {
-        "type": "string"
-      }
+      "resource": { "type": "string" },
+      "metric": { "type": "string" },
+      "aggregate": { "type": "string" },
+      "duration": { "type": "string" },
+      "threshold": { "type": "number" }
     },
     "plugins": [
       {
-        "name": "getLatestMetrics",
+        "name": "getMetricValue",
         "type": "sensor",
-        "version": "2.0.2",
+        "version": "2.0.5",
         "properties": {
-          "resource": "<%properties.resource%>"
+          "resource": "<%properties.resource%>",
+          "metric": "<%properties.metric%>",
+          "aggregate": "<%properties.aggregate%>",
+          "duration": "<%properties.duration%>"
         },
-        "dataTrigger": false,
-        "tickTrigger": false,
+        "tickTrigger":true,
+        "dataTrigger":false,
         "triggers": [
           "Collected"
         ]
       },
       {
-        "name": "condition",
-        "version": "1.1.0",
+        "name": "Function",
+        "version": "1.0.1",
         "type": "sensor",
         "properties": {
-          "condition": "${<%previousNode%>.rawData.engine_idle === true"
+          "formula": "${nodes.getMetricValue_1.rawData.result}",
+          "threshold": "<%properties.threshold%>"
         },
         "dataTrigger": false,
         "tickTrigger": false,
         "triggers": [
-          "True"
-        ]
-      }
-    ]
-  },
-  {
-    "name": "Truckspeed",
-    "description": "Check if the speed of a truck equals your defined speed",
-    "properties": {
-      "resource": {
-        "type": "string"
-      },
-      "speed": {
-        "type": "number"
-      }
-    },
-    "plugins": [
-      {
-        "name": "getLatestMetrics",
-        "type": "sensor",
-        "version": "2.0.2",
-        "properties": {
-          "resource": "<%properties.resource%>"
-        },
-        "dataTrigger": false,
-        "tickTrigger": false,
-        "triggers": [
-          "Collected"
-        ]
-      },
-      {
-        "name": "condition",
-        "version": "1.1.0",
-        "type": "sensor",
-        "properties": {
-          "condition": "${<%previousNode%>.rawData.speed === <%properties.speed%>"
-        },
-        "dataTrigger": false,
-        "tickTrigger": false,
-        "triggers": [
-          "True"
+          "Above"
         ]
       }
     ]

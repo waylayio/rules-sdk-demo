@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import SDK from '@waylay/rules-sdk'
+import Helper from '@waylay/rules-helper'
+
 import config from './sdk-config.json'
 
-const client = new SDK({ clientID: '', clientSecret: '', domain: '', config: config })
-const builder = client.createTaskBuilder({ name: 'demo form rule' })
+const { subflow } = new Helper({ clientID: '7c9246de701cbef35f097d91', secret: 'L9aOWT0/8afZ8MRGyIb/pX86ILJqQgBT', domain: 'demo.waylay.io', config: config })
+const builder = subflow.createTaskBuilder()
+
 const allPlugins = builder.getPlugins()
 
 const App = () => {
@@ -28,7 +30,7 @@ const App = () => {
 
   const submit = async () => {
     try {
-      const task = await builder.createTask()
+      const task = await builder.createTask('sdk test task')
     } catch (e) {
       console.error(e)
     }
