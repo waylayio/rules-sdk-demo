@@ -3,9 +3,7 @@
     "name": "Data and delay",
     "description": "Wait a second when data comes in",
     "properties": {
-      "resource": {
-        "type": "string"
-      }
+      "resource": { "type": "string" }
     },
     "plugins": [
       {
@@ -83,18 +81,19 @@
     "name": "alert message",
     "description": "sends an alarm",
     "properties": {
-      "message": {
-        "type": "string"
-      }
+      "message": { "type": "string" }
     },
     "plugins": [
       {
         "name": "debugDialog",
-        "version": "1.0.4",
-        "type": "actuator",
+        "version": "1.0.2",
+        "type": "sensor",
         "properties": {
           "message": "<%properties.message%>"
-        }
+        },
+        "dataTrigger": false,
+        "tickTrigger": false,
+        "triggers": []
       }
     ]
   }

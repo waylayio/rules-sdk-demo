@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Helper from '@waylay/rules-helper'
+import ReactJson from 'react-json-view'
 
 import config from './sdk-config.json'
 
@@ -12,6 +13,8 @@ const App = () => {
   const [ selectedPlug, setSelectedPlug ] = useState(allPlugins[0])
   const [ properties, setProperties ] = useState()
   const [ errorMessage, setErrorMessage ] = useState()
+  const [ name, setName ] = useState()
+  const [ template, setTemplate ] = useState()
 
   const addStep = () => {
     const newStep = { name: selectedPlug.name, properties }
@@ -29,10 +32,13 @@ const App = () => {
   }
 
   const submit = async () => {
+    if (!name) return setErrorMessage('template name missing')
+
     try {
-      const task = await builder.createTask('sdk test task')
+      const { entity } = await builder.createTemplate(name)
+      setTemplate(entity)
     } catch (e) {
-      console.error(e)
+      setErrorMessage(e.toString())
     }
   }
 
@@ -51,13 +57,13 @@ const App = () => {
   
   return (
     <div className="App">
-      <h1>Build rule</h1>
+      <h1>Build template</h1>
       {
         errorMessage && <div style={{ backgroundColor: 'red' }}>{ errorMessage }</div>
       }
       <div style={{ display: 'flex' }}>
         <div>
-          <h3>Select plugin</h3>
+          <h3>Select subflow</h3>
           <select name="plugins" id="plugins" onChange={(e) => {  setSelectedPlug(JSON.parse(e.target.value)) }}>
             {
               allPlugins.map(plugin => (
@@ -88,12 +94,12 @@ const App = () => {
         {
           selectedPlug && (
             <div>
-              <button type="button" onClick={() => addStep()}>Add Plugin</button>
+              <button type="button" onClick={() => addStep()}>Add Subflow</button>
             </div>
           ) 
         }
       </div>
-      <h2>Configured Steps</h2>
+      <h2>Configured Subflows</h2>
       <div>
         {
           builder.getSteps().map(step => {
@@ -107,7 +113,13 @@ const App = () => {
         }
       </div>
       <div>
-        <button type="button" onClick={() => submit()} style={{ marginTop: '10px' }}>Upload Task</button>
+        Name <input type='text' onChange={(e) => setName(e.target.value)} />
+        <button type="button" onClick={() => submit()} style={{ marginTop: '10px' }}>Upload Template</button>
+      </div>
+      <div>
+        {
+          template && <ReactJson src={template} name={null} />
+        }
       </div>
     </div>
   )
