@@ -4,7 +4,7 @@ import ReactJson from 'react-json-view'
 
 import config from './sdk-config.json'
 
-const { subflow } = new Helper({ clientID: '7c9246de701cbef35f097d91', secret: 'L9aOWT0/8afZ8MRGyIb/pX86ILJqQgBT', domain: 'demo.waylay.io', config: config })
+const { subflow } = new Helper({ clientID: '', secret: '', domain: '', config: config })
 const builder = subflow.createTaskBuilder()
 
 const allPlugins = builder.getPlugins()
